@@ -1,0 +1,29 @@
+# Dependency directories
+node_modules/
+
+# Front-end build artifacts
+front/dist/
+front/build/
+
+# Back-end build artifacts
+back/dist/
+back/build/
+
+# Environment files (if you use environment variables)
+.env
+
+# TypeScript compilation output (for the back-end)
+back/*.tsbuildinfo
+
+# Nodemon and ts-node cache (for the back-end)
+back/.nodemon/
+back/.ts-node/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# System files
+.DS_Store
