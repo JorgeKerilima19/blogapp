@@ -4,14 +4,21 @@ export const Register = () => {
   const [userName, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    fetch("http://localhost:4000/register", {
+      method: "POST",
+      body: JSON.stringify({ userName, password }),
+      headers: { "Content-Type": "application/json" },
+    });
+  };
+
   return (
     <section className="min-h-screen grid place-items-center">
       <form
         action=""
         className="grid place-items-center gap-8"
-        onSubmit={(e) => {
-          e.preventDefault();
-        }}
+        onSubmit={handleSubmit}
       >
         <h2 className="text-2xl">Register</h2>
         <input
