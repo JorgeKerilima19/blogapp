@@ -1,9 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
 interface User {
-  id: number;
   username: string;
-  email: string;
 }
 
 const UserSchema = new Schema<User & Record<string, any>>({

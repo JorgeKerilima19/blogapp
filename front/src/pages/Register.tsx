@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 
 export const Register = () => {
-  const [userName, setUserName] = useState<string>("");
+  const [username, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     fetch("http://localhost:4000/register", {
       method: "POST",
-      body: JSON.stringify({ userName, password }),
+      body: JSON.stringify({ username, password }),
       headers: { "Content-Type": "application/json" },
     });
   };
@@ -26,7 +26,7 @@ export const Register = () => {
             "py-1 px-2 border-2 border-gray-400 focus:border-black transition duration-300"
           }
           type="text"
-          value={userName}
+          value={username}
           placeholder="type smth"
           onChange={(e) => {
             setUserName(e.target.value);
