@@ -35,6 +35,25 @@ app.post("/register", async (req, res) => {
   }
 });
 
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+
+  const userRequest: Document | null = await User.findOne({
+    username,
+  });
+
+  if (userRequest) {
+    if ("password" in userRequest) {
+      const isRegistered = bcrypt.compareSync(password, userRequest.password);
+      return res.json(isRegistered);
+    } else {
+      return res.status(400).json({ error: "Password not found for the user" });
+    }
+  } else {
+    return res.status(404).json({ error: "User not found" });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });

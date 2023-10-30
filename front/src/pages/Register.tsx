@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 
 export const Register = () => {
   const [username, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const response = await fetch("http://localhost:4000/register", {
       method: "POST",
