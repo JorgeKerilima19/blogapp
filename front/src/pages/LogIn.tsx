@@ -1,8 +1,11 @@
 import React, { FormEvent, useState } from "react";
+import { Navigate } from "react-router-dom";
 
 export const LogIn = () => {
   const [username, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
+  const [redirect, setRedirect] = useState(false);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -16,8 +19,13 @@ export const LogIn = () => {
     } else {
       alert("User Not found");
     }
+    if (response.ok) {
+      setRedirect(true);
+    }
   };
-
+  if (redirect) {
+    return <Navigate to={"/main"} />;
+  }
   return (
     <section className="min-h-screen grid place-items-center">
       <form
