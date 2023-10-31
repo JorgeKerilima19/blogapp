@@ -1,16 +1,18 @@
 import express from "express";
 import cors from "cors";
-import mongoose from "mongoose";
+import mongoose, { Document, Types } from "mongoose";
 
 import User from "./models/user";
 
 const env = require("dotenv").config();
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const app = express();
 const port = process.env.PORT || 4000;
 
 const salt = bcrypt.genSaltSync(10);
+const webTokenSalt = "awsgfakhjsvbmnasgfjkhq";
 
 app.use(cors());
 app.use(express.json());
@@ -38,14 +40,21 @@ app.post("/register", async (req, res) => {
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
-  const userRequest: Document | null = await User.findOne({
-    username,
-  });
+  const userRequest: (Document & { _id: Types.ObjectId }) | null =
+    await User.findOne({ username });
 
   if (userRequest) {
     if ("password" in userRequest) {
       const isRegistered = bcrypt.compareSync(password, userRequest.password);
-      return res.json(isRegistered);
+      jwt.sign(
+        { username, id: userRequest._id },
+        webTokenSalt,
+        {},
+        (err: Error, token: any) => {
+          if (err) throw err;
+          res.cookie("token", token).json("ok");
+        }
+      );
     } else {
       return res.status(400).json({ error: "Password not found for the user" });
     }
