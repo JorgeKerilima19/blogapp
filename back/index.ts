@@ -1,12 +1,13 @@
-import express from "express";
+import express, { Response, Request } from "express";
 import cors from "cors";
 import mongoose, { Document, Types } from "mongoose";
 
-import User from "./models/user";
+import UserModel, { User } from "./models/user";
 
 const env = require("dotenv").config();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -14,8 +15,9 @@ const port = process.env.PORT || 4000;
 const salt = bcrypt.genSaltSync(10);
 const webTokenSalt = "awsgfakhjsvbmnasgfjkhq";
 
-app.use(cors({ credentials: true, origin: "http://localhost:5000" }));
+app.use(cors({ origin: "http://localhost:5000", credentials: true }));
 app.use(express.json());
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.send("Server OK");
@@ -24,10 +26,10 @@ app.get("/", (req, res) => {
 mongoose.connect(`mongodb+srv://blogApp:${process.env.PASS_ACCESS}@cluster0.s8y8dpk.mongodb.net/
 `);
 
-app.post("/register", async (req, res) => {
+app.post("/register", async (req: Request, res: Response) => {
   const { username, password } = req.body;
   try {
-    const newUser = await User.create({
+    const newUser = await UserModel.create({
       username,
       password: bcrypt.hashSync(password, salt),
     });
@@ -37,30 +39,46 @@ app.post("/register", async (req, res) => {
   }
 });
 
-app.post("/login", async (req, res) => {
+app.post("/login", async (req: Request, res: Response) => {
   const { username, password } = req.body;
 
-  const userRequest: (Document & { _id: Types.ObjectId }) | null =
-    await User.findOne({ username });
+  try {
+    const userRequest: User | null = await UserModel.findOne({ username });
 
-  if (userRequest) {
-    if ("password" in userRequest) {
-      const isRegistered = bcrypt.compareSync(password, userRequest.password);
-      jwt.sign(
-        { username, id: userRequest._id },
-        webTokenSalt,
-        {},
-        (err: Error, token: any) => {
-          if (err) throw err;
-          res.cookie("token", token).json("ok");
-        }
+    if (userRequest) {
+      const isPasswordValid: boolean = await bcrypt.compare(
+        password,
+        userRequest.password
       );
+
+      if (isPasswordValid) {
+        const token: string = jwt.sign(
+          { username: userRequest.username, id: userRequest._id },
+          webTokenSalt
+        );
+
+        res
+          .cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+          })
+          .json("Login successful");
+      } else {
+        return res.status(400).json({ error: "Invalid password" });
+      }
     } else {
-      return res.status(400).json({ error: "Password not found for the user" });
+      return res.status(404).json({ error: "User not found" });
     }
-  } else {
-    return res.status(404).json({ error: "User not found" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ error: "An error occurred while processing your request" });
   }
+});
+
+app.get("/profile", async (req: Request, res: Response) => {
+  res.json(req.cookies);
 });
 
 app.listen(port, () => {

@@ -14,6 +14,7 @@ export const LogIn = () => {
       method: "POST",
       body: JSON.stringify({ username, password }),
       headers: { "Content-Type": "application/json" },
+      credentials: "include",
     });
     if (response.status === 200) {
       alert("User Found");
