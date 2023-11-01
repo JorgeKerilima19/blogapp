@@ -1,11 +1,12 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useState, useContext } from "react";
 import { Navigate } from "react-router-dom";
+import AppContext from "../context/AppContext";
 
 export const LogIn = () => {
   const [username, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const [redirect, setRedirect] = useState(false);
+  const { logged, setLogged } = useContext(AppContext);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -20,10 +21,10 @@ export const LogIn = () => {
       alert("User Not found");
     }
     if (response.ok) {
-      setRedirect(true);
+      setLogged(true);
     }
   };
-  if (redirect) {
+  if (logged) {
     return <Navigate to={"/main"} />;
   }
   return (
