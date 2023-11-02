@@ -1,14 +1,24 @@
 import React, { useEffect, useContext } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AppContext from "../context/AppContext";
 
 export const Navbar = () => {
-  const { logged } = useContext(AppContext);
+  const { logged, setLogged } = useContext(AppContext);
+
+  const navigate = useNavigate();
 
   const handleLogOut = async () => {
-    //log out
-    console.log("Logged Out");
+    const isloggedOut = await fetch("http://localhost:4000/logout", {
+      credentials: "include",
+      method: "POST",
+    });
+
+    if (isloggedOut) {
+      setLogged((logged) => !logged);
+      alert("Succesfully logged out");
+      navigate("/login");
+    }
   };
 
   useEffect(() => {

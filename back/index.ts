@@ -80,12 +80,20 @@ app.post("/login", async (req: Request, res: Response) => {
 app.get("/profile", async (req: Request, res: Response) => {
   const { token } = req.cookies;
 
+  if (!token) {
+    return res.status(401).json({ error: "Token not provided" });
+  }
+
   jwt.verify(token, webTokenSalt, {}, (err: Error, info: any) => {
     if (err) {
-      throw err;
+      return res.status(401).json({ error: "Invalid token" });
     }
     res.json(info);
   });
+});
+
+app.post("/logout", (req: Request, res: Response) => {
+  res.cookie("token", "").json("Logged Out");
 });
 
 app.listen(port, () => {
