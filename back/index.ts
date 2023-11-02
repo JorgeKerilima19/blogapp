@@ -13,7 +13,7 @@ const app = express();
 const port = process.env.PORT || 4000;
 
 const salt = bcrypt.genSaltSync(10);
-const webTokenSalt = "awsgfakhjsvbmnasgfjkhq";
+const webTokenSalt = process.env.SALT;
 
 app.use(cors({ origin: "http://localhost:5000", credentials: true }));
 app.use(express.json());
@@ -78,7 +78,14 @@ app.post("/login", async (req: Request, res: Response) => {
 });
 
 app.get("/profile", async (req: Request, res: Response) => {
-  res.json(req.cookies);
+  const { token } = req.cookies;
+
+  jwt.verify(token, webTokenSalt, {}, (err: Error, info: any) => {
+    if (err) {
+      throw err;
+    }
+    res.json(info);
+  });
 });
 
 app.listen(port, () => {
