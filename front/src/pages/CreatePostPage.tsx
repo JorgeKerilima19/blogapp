@@ -1,6 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 export const CreatePostPage = () => {
+  const [header, setHeader] = useState<string>("");
+  const [summary, setSummary] = useState<string>("");
+  const [content, setContent] = useState<string>("");
+
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      [{ font: [] }],
+      [{ size: ["small", false, "large", "huge"] }],
+      ["bold", "italic", "underline", "strike"],
+      ["blockquote", "code-block"],
+
+      [{ header: 1 }, { header: 2 }],
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ script: "sub" }, { script: "super" }],
+      [{ indent: "-1" }, { indent: "+1" }],
+      [{ direction: "rtl" }],
+
+      [{ color: [] }, { background: [] }],
+    ],
+  };
   return (
     <section className="pt-20 grid gap-10 place-items-center">
       <h2 className="text-2xl font-bold">Create a new post</h2>
@@ -34,6 +57,13 @@ export const CreatePostPage = () => {
           Upload a file
         </label>
         <input id="post-file" type="file" />
+        <ReactQuill modules={modules} />
+        <button
+          className="px-5 border-2 py-1 border-white bg-red-700 hover:bg-slate-50 text-white hover:text-red-700 hover:border-red-700 transition transition-300"
+          type="submit"
+        >
+          Create Post
+        </button>
       </form>
     </section>
   );

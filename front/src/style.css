@@ -5,3 +5,9 @@
 input[type="file"] {
   visibility: hidden;
 }
+.ql-editor {
+  min-height: 20rem;
+}
+.quill {
+  width: max(100%, 20rem);
+}
