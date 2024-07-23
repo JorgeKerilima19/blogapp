@@ -37,6 +37,8 @@ export const CreatePostPage = () => {
             id="post-title"
             className="min-w-[15rem] border px-2 py-1"
             placeholder="title"
+            value={header}
+            onChange={(e) => setHeader(e.target.value)}
           />
         </label>
         <label
@@ -48,6 +50,8 @@ export const CreatePostPage = () => {
             id="post-overview"
             className="min-w-[15rem] border px-2 py-1 min-h-[10rem] resize-none"
             placeholder="overview"
+            value={summary}
+            onChange={(e) => setSummary(e.target.value)}
           />
         </label>
         <label
@@ -56,8 +60,16 @@ export const CreatePostPage = () => {
         >
           Upload a file
         </label>
-        <input id="post-file" type="file" />
-        <ReactQuill modules={modules} />
+        <input
+          id="post-file"
+          type="file"
+          onChange={(e) => console.log(e.target.files)}
+        />
+        <ReactQuill
+          modules={modules}
+          value={content}
+          onChange={(newValue) => setContent(newValue)}
+        />
         <button
           className="px-5 border-2 py-1 border-white bg-red-700 hover:bg-slate-50 text-white hover:text-red-700 hover:border-red-700 transition transition-300"
           type="submit"

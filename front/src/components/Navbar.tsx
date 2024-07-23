@@ -3,6 +3,8 @@ import React, { useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AppContext from "../context/AppContext";
 
+import logo from "/logo.png";
+
 export const Navbar = () => {
   const { logged, setLogged } = useContext(AppContext);
 
@@ -33,9 +35,9 @@ export const Navbar = () => {
   }, []);
 
   return (
-    <nav className="flex justify-between">
+    <nav className="flex justify-between items-center">
       <Link to={"/"}>
-        <img src="" alt="logo" />
+        <img src={logo} alt="logo" className="h-10 w-10" />
       </Link>
       <ul className="flex gap-5">
         {logged ? (
