@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, FormEvent } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
@@ -6,6 +6,23 @@ export const CreatePostPage = () => {
   const [header, setHeader] = useState<string>("");
   const [summary, setSummary] = useState<string>("");
   const [content, setContent] = useState<string>("");
+  const [files, setFiles] = useState<File | any>();
+
+  const createNewPost = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const data = new FormData();
+    data.set("header", header);
+    data.set("summary", summary);
+    data.set("content", content);
+    data.set("files", files);
+
+    fetch("http://localhost:4000/post", {
+      method: "POST",
+      body: data,
+    });
+
+    alert("Sent");
+  };
 
   const modules = {
     toolbar: [
@@ -27,7 +44,10 @@ export const CreatePostPage = () => {
   return (
     <section className="pt-20 grid gap-10 place-items-center">
       <h2 className="text-2xl font-bold">Create a new post</h2>
-      <form className="min-h-screen flex flex-col gap-5 items-center w-4/5">
+      <form
+        className="min-h-screen flex flex-col gap-5 items-center w-4/5"
+        onSubmit={createNewPost}
+      >
         <label
           className="md:min-w-[50%] min-w-[18rem] flex gap-5 justify-between flex-col md:flex-row"
           htmlFor="post-title"
@@ -63,7 +83,11 @@ export const CreatePostPage = () => {
         <input
           id="post-file"
           type="file"
-          onChange={(e) => console.log(e.target.files)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            const input = e.target as HTMLInputElement;
+            const selectedFile = input.files?.[0];
+            setFiles(selectedFile);
+          }}
         />
         <ReactQuill
           modules={modules}
