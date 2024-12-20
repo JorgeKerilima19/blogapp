@@ -8,7 +8,7 @@ export const CreatePostPage = () => {
   const [content, setContent] = useState<string>("");
   const [files, setFiles] = useState<File | any>();
 
-  const createNewPost = (e: FormEvent<HTMLFormElement>) => {
+  const createNewPost = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = new FormData();
     data.set("header", header);
@@ -16,7 +16,7 @@ export const CreatePostPage = () => {
     data.set("content", content);
     data.set("files", files);
 
-    fetch("http://localhost:4000/post", {
+    const response = await fetch("http://localhost:4000/post", {
       method: "POST",
       body: data,
     });
