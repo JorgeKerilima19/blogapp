@@ -3,11 +3,16 @@ import cors from "cors";
 import mongoose, { Document, Types } from "mongoose";
 
 import UserModel, { User } from "./models/user";
+import { request } from "http";
 
 const env = require("dotenv").config();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
+const multer = require("multer");
+const fs = require("fs");
+
+const uploadMiddleware = multer({ dest: "uplodes/" });
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -95,6 +100,21 @@ app.get("/profile", async (req: Request, res: Response) => {
 app.post("/logout", (req: Request, res: Response) => {
   res.cookie("token", "").json("Logged Out");
 });
+
+app.post(
+  "/post",
+  uploadMiddleware.single("files"),
+  (request: Request, response: Response) => {
+    const originalname: any = request.file?.originalname;
+    const path: any = request.file?.path;
+
+    const parts = originalname.split(".");
+    const ext = parts[parts.length - 1];
+
+    fs.renameSync(path, path + "." + ext);
+    response.json({ ext });
+  }
+);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
