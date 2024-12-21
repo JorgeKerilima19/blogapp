@@ -3,7 +3,7 @@ import cors from "cors";
 import mongoose, { Document, Types } from "mongoose";
 
 import UserModel, { User } from "./models/user";
-import { request } from "http";
+import PostModel, { Post } from "./models/post";
 
 const env = require("dotenv").config();
 const bcrypt = require("bcryptjs");
@@ -104,15 +104,26 @@ app.post("/logout", (req: Request, res: Response) => {
 app.post(
   "/post",
   uploadMiddleware.single("files"),
-  (request: Request, response: Response) => {
+  async (request: Request, response: Response) => {
     const originalname: any = request.file?.originalname;
     const path: any = request.file?.path;
 
     const parts = originalname.split(".");
     const ext = parts[parts.length - 1];
+    const newPath = path + "." + ext;
 
-    fs.renameSync(path, path + "." + ext);
-    response.json({ ext });
+    fs.renameSync(path, newPath);
+
+    const { header, summary, content } = request.body;
+
+    const postDoc = await PostModel.create({
+      title: header,
+      summary,
+      content,
+      cover: newPath,
+    });
+
+    response.json({ header, summary, content, cover: newPath });
   }
 );
 
