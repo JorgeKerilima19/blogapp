@@ -3,7 +3,7 @@ import cors from "cors";
 import mongoose, { Document, Types } from "mongoose";
 
 import UserModel, { User } from "./models/user";
-import PostModel, { Post } from "./models/post";
+import PostModel from "./models/post";
 
 const env = require("dotenv").config();
 const bcrypt = require("bcryptjs");
@@ -123,7 +123,7 @@ app.post(
       cover: newPath,
     });
 
-    response.json({ header, summary, content, cover: newPath });
+    response.json(postDoc);
   }
 );
 

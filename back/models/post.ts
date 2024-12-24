@@ -10,8 +10,8 @@ export interface Post extends Document {
 
 const PostSchema = new Schema<Post>(
   {
-    title: { type: String, required: true, minlength: 4 },
-    summary: { type: String, required: true, minlength: 10 },
+    title: { type: String, required: true },
+    summary: { type: String, required: true },
     content: { type: String, required: true },
     cover: { type: String, required: true },
   },

@@ -1,12 +1,15 @@
 import React, { useState, FormEvent } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { Navigate } from "react-router-dom";
 
 export const CreatePostPage = () => {
   const [header, setHeader] = useState<string>("");
   const [summary, setSummary] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [files, setFiles] = useState<File | any>();
+
+  const [redirect, setRedirect] = useState<boolean>(false);
 
   const createNewPost = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,8 +24,15 @@ export const CreatePostPage = () => {
       body: data,
     });
 
-    alert("Sent");
+    if (response.ok) {
+      setRedirect(true);
+      alert("Post Succesful, going to Homepage");
+    }
   };
+  
+  if (redirect) {
+    return <Navigate to={"/"} />;
+  }
 
   const modules = {
     toolbar: [
