@@ -31,7 +31,7 @@ export const CreatePostPage = () => {
   };
   
   if (redirect) {
-    return <Navigate to={"/"} />;
+    return <Navigate to={"/main"} />;
   }
 
   const modules = {

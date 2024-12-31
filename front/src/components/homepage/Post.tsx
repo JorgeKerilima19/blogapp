@@ -1,16 +1,17 @@
 import React from "react";
 import placeholder from "/img.jpeg";
+import { PostType } from "../../types";
 
-const Post = () => {
+const Post = ({ key, post }: { key: number; post: PostType }) => {
   return (
     <div className="flex sm:flex-row flex-col gap-3 p-4 w-4/5">
       <img
         className="w-56 h-44 max-w-xs object-cover"
-        src={placeholder}
+        src={`${post.cover ? post.cover : placeholder}`}
         alt="placeholder"
       />
       <div className="flex-col">
-        <h2 className="text-2xl">Post Title</h2>
+        <h2 className="text-2xl">{post.title}</h2>
         <div>
           <h3 className="text-sm">Author Posst</h3>
           <h3 className="text-xs">Sept 24</h3>

@@ -127,6 +127,11 @@ app.post(
   }
 );
 
+app.get("/post", async (req: Request, res: Response) => {
+  const postsList = await PostModel.find();
+  res.json(postsList);
+});
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
