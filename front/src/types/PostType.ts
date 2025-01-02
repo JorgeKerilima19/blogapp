@@ -4,4 +4,5 @@ export type PostType = {
   summary: string;
   content: string;
   cover: string;
+  createdAt: string | number | Date;
 };
