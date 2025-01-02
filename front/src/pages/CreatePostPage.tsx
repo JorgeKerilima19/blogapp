@@ -22,6 +22,7 @@ export const CreatePostPage = () => {
     const response = await fetch("http://localhost:4000/post", {
       method: "POST",
       body: data,
+      credentials: "include",
     });
 
     if (response.ok) {
@@ -29,7 +30,7 @@ export const CreatePostPage = () => {
       alert("Post Succesful, going to Homepage");
     }
   };
-  
+
   if (redirect) {
     return <Navigate to={"/main"} />;
   }

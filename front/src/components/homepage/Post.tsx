@@ -14,7 +14,7 @@ const Post = ({ post }: { key: number; post: PostType }) => {
       <div className="flex flex-col gap-2">
         <h2 className="text-2xl">{post.title}</h2>
         <div className="flex gap-4">
-          <h3 className="text-sm">Author Posst</h3>
+          <h3 className="text-sm">{post.author.username}</h3>
           <time className="text-xs">
             {formatISO9075(new Date(post.createdAt))}
           </time>
