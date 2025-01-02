@@ -6,6 +6,7 @@ export interface Post extends Document {
   summary: string;
   content: string;
   cover: string;
+  author: mongoose.Types.ObjectId;
 }
 
 const PostSchema = new Schema<Post>(
@@ -14,6 +15,7 @@ const PostSchema = new Schema<Post>(
     summary: { type: String, required: true },
     content: { type: String, required: true },
     cover: { type: String, required: true },
+    author: { type: Schema.Types.ObjectId, ref: "User" },
   },
   {
     timestamps: true,

@@ -104,7 +104,7 @@ app.post("/logout", (req: Request, res: Response) => {
 app.post(
   "/post",
   uploadMiddleware.single("files"),
-  async (request: Request, response: Response) => {
+  (request: Request, response: Response) => {
     const originalname: any = request.file?.originalname;
     const path: any = request.file?.path;
 
@@ -114,21 +114,36 @@ app.post(
 
     fs.renameSync(path, newPath);
 
-    const { header, summary, content } = request.body;
+    const { token } = request.cookies;
+    jwt.verify(
+      token,
+      webTokenSalt,
+      {},
+      async (err: Error, info: { id: any }) => {
+        if (err) throw err;
 
-    const postDoc = await PostModel.create({
-      title: header,
-      summary,
-      content,
-      cover: newPath,
-    });
+        const { header, summary, content } = request.body;
 
-    response.json(postDoc);
+        const postDoc = await PostModel.create({
+          title: header,
+          summary,
+          content,
+          cover: newPath,
+          author: info.id,
+        });
+
+        response.json(postDoc);
+      }
+    );
   }
 );
 
 app.get("/post", async (req: Request, res: Response) => {
-  const postsList = await PostModel.find();
+  const postsList = await PostModel.find()
+    .populate("author", ["username"])
+    .sort({ createdAt: -1 })
+    .limit(10);
+
   res.json(postsList);
 });
 
