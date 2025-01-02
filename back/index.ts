@@ -152,9 +152,18 @@ app.get("/post", async (req: Request, res: Response) => {
 app.get("/post/:id", async (request: Request, response: Response) => {
   const { id } = request.params;
 
-  const postDoc = await PostModel.findById(id).populate("author", ["username"]);
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id))
+      return response.status(400).json({ error: "Invalid ID" });
 
-  response.json(postDoc);
+    const postDoc = await PostModel.findById(id).populate("author", [
+      "username",
+    ]);
+    response.json(postDoc);
+  } catch (err) {
+    console.error(err);
+    response.status(500).json({ error: "An unexpected error occurred" });
+  }
 });
 
 app.listen(port, () => {
