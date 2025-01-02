@@ -8,6 +8,7 @@ front/build/
 # Back-end build artifacts
 back/dist/
 back/build/
+back/uplodes
 
 # Environment files (if you use environment variables)
 .env
