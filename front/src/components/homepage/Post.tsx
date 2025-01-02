@@ -2,13 +2,17 @@ import React from "react";
 import placeholder from "/img.jpeg";
 import { PostType } from "../../types";
 import { formatISO9075 } from "date-fns";
+import { Link } from "react-router-dom";
 
 const Post = ({ post }: { key: number; post: PostType }) => {
   return (
-    <div className="flex sm:flex-row flex-col gap-3 p-4 w-4/5">
+    <Link
+      to={`/post/${post._id}`}
+      className="flex sm:flex-row flex-col gap-3 p-4"
+    >
       <img
-        className="w-56 h-44 max-w-xs object-cover"
-        src={`${post.cover ? post.cover : placeholder}`}
+        className="w-60 h-44 object-cover"
+        src={`http://localhost:4000/${post.cover ? post.cover : placeholder}`}
         alt="placeholder"
       />
       <div className="flex flex-col gap-2">
@@ -24,7 +28,7 @@ const Post = ({ post }: { key: number; post: PostType }) => {
           cum, facilis rerum error doloremque accusantium.
         </p>
       </div>
-    </div>
+    </Link>
   );
 };
 

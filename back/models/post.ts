@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 export interface Post extends Document {
-  __id: mongoose.Types.ObjectId;
+  _id: mongoose.Types.ObjectId;
   title: string;
   summary: string;
   content: string;

@@ -36,7 +36,7 @@ export const Navbar = () => {
 
   return (
     <nav className="flex justify-between items-center">
-      <Link to={"/"}>
+      <Link to={"/main"}>
         <img src={logo} alt="logo" className="h-10 w-10" />
       </Link>
       <ul className="flex gap-5">

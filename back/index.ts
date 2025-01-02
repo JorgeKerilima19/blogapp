@@ -24,6 +24,8 @@ app.use(cors({ origin: "http://localhost:5000", credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
+app.use("/uplodes", express.static(__dirname + "/uplodes"));
+
 app.get("/", (req, res) => {
   res.send("Server OK");
 });
@@ -145,6 +147,14 @@ app.get("/post", async (req: Request, res: Response) => {
     .limit(10);
 
   res.json(postsList);
+});
+
+app.get("/post/:id", async (request: Request, response: Response) => {
+  const { id } = request.params;
+
+  const postDoc = await PostModel.findById(id).populate("author", ["username"]);
+
+  response.json(postDoc);
 });
 
 app.listen(port, () => {

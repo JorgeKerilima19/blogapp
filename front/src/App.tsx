@@ -10,6 +10,7 @@ import {
   MainPage,
   LogIn,
   CreatePostPage,
+  PostPage,
 } from "./pages";
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/login" index element={<LogIn />} />
         <Route path="/main" index element={<MainPage />} />
         <Route path="/create-post" index element={<CreatePostPage />} />
+        <Route path="/post/:id" element={<PostPage />} />
       </Route>
       <Route path="/*" element={<NotFound />}></Route>
     </Routes>

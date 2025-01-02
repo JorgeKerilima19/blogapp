@@ -1,7 +1,7 @@
 import { AuthorType } from "./AuthorType";
 
 export type PostType = {
-  __id: number;
+  _id: number;
   title: string;
   summary: string;
   content: string;
